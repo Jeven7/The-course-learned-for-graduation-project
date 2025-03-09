@@ -56,3 +56,116 @@
 - Step 2: Store it (bind it) to the left hand side (the VARIABLE)
     - "Retrieve value associated with name by invoking the name(typing it out)
 
+## Lecture 2
+
+### Slicing to get one character in a string 
+- s="abc"
+- s[0]="a"
+- s[1]="b"
+- s[2]="c"
+- s[-1]="c"
+- s[-2]="b"
+- s[-3]="a"
+
+### Slicing to get a  substring
+- Can slice string using [start:stop:step]
+- Get character at start, up to and including stop-1, taking every step character
+- s="sbcdefgh"
+- s[3:6]="def"
+- s[3:6:2]="df"
+- s[:]="sbcdefgh"， same as s[0:len(s):1]
+- s[::-1]="hgfedcba"
+
+### IMMUTABLE不可变的 STRINGS
+- Strings are “immutable”-cannot be modified
+- You can create new objects that are versions of the original one
+- Variable name can only be bound to one object
+- S = "car"
+- s[0]= 'b'
+    - gives an error
+- s ='b'+s[1:len(s)]
+    - is allowed,s bound to new object
+
+### printing
+- print()
+- a="the"
+- b=3
+- c="musketeers"
+- print(a,b,c)
+    - the 3 musketeers
+- print(a+b+c)
+    - this is an error
+- print(a+str(b)+c)
+    - the3musketeers
+
+### input
+- x = input(s)
+    - "Prints the value of the string s
+    - User types in something and hits enter
+    - That value is assigned to the variable x
+- Binds that value to a variable
+    - text = input("Type anything:")
+    - print(5*text)
+- input always returns an str, must cast if working with numbers
+
+### logical operators on bool
+- not 
+- and
+- or
+
+### branching in python
+    if<condition>:
+        <code>
+        <code>
+
+    if<condition>:
+        <code>
+        <code>
+    else:
+        <code>
+        <code>
+
+    if<condition>:
+        <code>
+        <code>
+    elif<condition>:
+        <code>
+        <code>
+    elif<condition>:
+        <code>
+        <code>
+
+## Lecture 3 Iteration
+
+### Control flow: while loop
+    while <condition>:
+        <code>
+        <code>
+### structure of for loops
+    for <variable> in <sequence of values>:
+        <code>
+        ...
+- each time through the loop, < variable > takes a value
+- First time ,< variable > is the first value in sequence
+- Next time, < variable > gets the second value
+
+### A common sequence of values
+    for <variable> in range <some_num>:
+        <code>
+        ...
+
+- range<some_num> means 0-some_num-1
+
+### range
+- Generates a sequence of ints, following a pattern 
+- range(start, stop,step)
+    - start: first int generated
+    - stop: controls last int generated (go up to but not including this int)
+    - step: used to generate next int in sequence
+
+## Lecture 4 Loops over strings, guess-and-check, binary
+
+### break statement
+- Immediately exits whatever loop it is in 
+- Skips remaining expression in code block
+- **Exits only innermost loop**
