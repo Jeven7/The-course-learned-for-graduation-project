@@ -169,3 +169,102 @@
 - Immediately exits whatever loop it is in 
 - Skips remaining expression in code block
 - **Exits only innermost loop**
+
+### Guess-and-check
+- Process called exhaustive enumeration 穷举法
+- Applies to problem where ...
+    - You are able to guess a value for solution
+    - You are able to check if the solution is correct 
+- You are keep guessing until
+    - Find solution or
+    - Have guessed all values
+
+### Guess-and-check root
+- Basic idea
+    - Given an int, call it x, want to see if there is another int which is its square root
+    - Start with a guess and check if it is the right answer
+
+### Operations on some floats introduces a very small error
+The small error can have a big effect if operations are done many times.
+
+### FLOATING POINT REPRESENTATION
+- Depends on computer hardware, not programming language implementation
+- Key things to understand
+    - Numbers (and everything else) are represented as a sequence of bits (0 or 1).
+    - When we write numbers down, the notation uses base 10.
+        - 0.1 stands for the rational number 1/10
+    - This produces cognitive dissonance - and it will influence how we write code
+
+
+## Lecture 5 Floats and Approximation Methods
+
+### Fractions
+- what does the decimal fraction 0.abc mean
+    - a\*10^-1 + b\*10^-2 + c\*10^-3
+- For binary representation, we use the same idea
+    - a\*2^-1 + b\*2^-2 + c\*2^-3
+- Or to put this in simpler terms, the binary representation of a decimal fraction f would require finding the values of a, b, c, etc. such that
+    - f=0.5a+0.25b+0.125c+0.0625d+0.03125e... 
+- In decimal form:3/8=0.375=3\*10^-1 + 7\*10^-2+5\*10^-3
+- Recipe idea: if we can multiply by a power of 2 big enough to turn into a whole number, can convert to binary, and then divide by the same power of 2 to restore
+    - 0.375*(2**3)=3
+    - Convert 3 to binary (now 11)
+    - Divide by 2**3 (shift right three spots) to get 0.011
+
+### Storing floating point numbers
+- Floating point is a pair of integers
+    - Significant digits and base 2 exponent指数
+    - (1,1) - 1\*2^1 - 10 - 2.0
+    - (1,-1) - 1\*2^-1 - 0.1 - 0.5
+    - (125,-2) - 125\*2^-2 - 11111.01 - 31.25
+
+### USE A FINITE SET OF BITS TO REPRESENT A POTENTIALLY INFINITE SET OF BITS
+- The maximum number of significant digits governs the precision with which numbers can be represented
+- Most modern computers use 32 bits to represent significant digits
+- lf a number is represented with more than 32 bits in binary, the number will be rounded
+    - Error will be at the 32nd bit
+    - Error will only be on order of 2\*10^-10
+
+### Summary 
+- Floating point numbers introduce challenges!
+- They can't be represented in memory exactly
+    - Operations on floats introduce tiny errors
+    - "Multiple operations on floats magnify errors
+- Approximation methods use floats
+    - Like guess-and-check except that
+        - We use a float as an increment
+        - We stop when we are close enough
+    - Never use == to compare floats in the stopping condition
+    - Be careful about overshooting the close-enough stopping condition
+
+## Lecture 6 Bisection Search 二分查找
+
+### Log growth is better
+- The brute force method is **linear in size of problem**
+- Bisection search is **logarithmic in size of problem**
+
+### Some observation
+- Bisection search **radically reduces computation time** - being smart about generating guesses is important
+- Search space gets **smaller quickly at begining** and then more slowly (in absolute terms, but not as a fraction of search space) later
+- Works on **problems with "ordering" property**
+
+### Iterative algorithms
+- Guess and check methods build on **reusing same code**
+    - Use a looping construct
+    - Generate guesses
+    - Check and continue
+- **Generating guesses**
+    - Exhaustive enumeration穷举法
+    - Approximation algorithm 近似法
+    - Bisection search 二分查找
+    - Newton-Raphson(for root finding)
+
+### DECOMPOSITION and ABSTRACTION
+- Decomposition:
+    - ldeally parts can be reused by other programs
+    - Self-contained means parts should **complete computation using only inputs provided** to them and "basic" operations
+- Abstraction:
+    - Used to separate what something does, from how it actually does it
+    - Creating parts and abstracting away details allows us to write complex code while suppressing details, so that we are not overwhelmed by that complexity.
+
+## Lecture 7 Decomposition, Abstraction, and Functions
