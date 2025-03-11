@@ -268,3 +268,175 @@ The small error can have a big effect if operations are done many times.
     - Creating parts and abstracting away details allows us to write complex code while suppressing details, so that we are not overwhelmed by that complexity.
 
 ## Lecture 7 Decomposition, Abstraction, and Functions
+
+### Suppress details with abstraction
+- Coder achives abstraction with a **function (or procedure)**
+- A function lets us capture code within a black box
+    - Once we create function, it will produce an output from inputs, while hiding details of how it does the computation
+- A function has **specifications**, captured using **docstrings**
+
+### Create structure with decomposition
+- Given the idea of black box straction, use it to **divide code into modules** that are:
+    - **Self-contained**
+    - Intended to be reusable
+- Modules are used to:
+    - **Break up** code into logical pieces
+    - Keep code **organized**
+    - Keep code **coherent** (readable and understandable)
+- Decomposition relies on abstraction to enable construction of complex modules from simpler ones
+
+### Functions
+- Reusable pieces of code called **functions** or **procedures**
+- A function is just some **code written in a special, reusable way**
+
+### FUNCTION CHARACTERISTICS
+- Has a name
+    - (think: variable bound to a function object)
+- Has (formal) parameters (0 or more)
+    - The inputs
+- Has a docstring (optional but recommended)
+    - A comment delineated by " "" (triple quotes) that provides a specification for the function-contract relating output to input
+- Has a body, a set of instructions to execute when function is called
+- Returns something
+    - Keyword return
+
+## Lecture 8 Functions as Objects
+### Understanding function calls
+- It **creates a new environment** with every function call
+    - Like a **mini program** that it needs to complete
+    - This mini program runs with **assigning its parameters** to some inputs
+    - It does the work (aka the **body** of the function)
+    - It **returns** the value
+    - The **environment disappears** after it returns the value
+
+### Variable scope
+- **Formal parameters** get bound to the value of **input parameters**
+- **Scope** is mapping of names to objects
+    - Defines context in which body is evaluated
+    - Values of variables given by bindings of names
+- Expressions in body of function evaluated wrt this new scope
+
+### HIGHER ORDER PROCEDURES
+- Objects in Python have a type
+    - int, float, str, Boolean, NoneType, function
+- Objects can appear in RHS of assignment statement
+    - Bind a name to an object
+- Objects
+    - Can be **used as an argument** to a procedure
+    - Can be **returned as a value** from a procedure
+- Functions are also first class objects!
+- Treat functions just like the other types
+    - Functions can be arguments to another function
+    - Functions can be returned by another function
+
+## Lecture 9 Lambda functions, tuples and lists
+### Anonymous匿名  functions
+- Sometimes don't want to name functions, especially simple ones.
+- Can use an anonymous procedure by using lambda
+    `` lambda x: x%2==0``
+- lambda creates a procedure/function object, but simply does not bind a name to it
+- Function call with a named function: 
+    `` apply(is_even,10)``
+- Function call with an anonymous functions as parameter: 
+    ``apply(lambda x: x%2==0,10)``
+- lambda function is **one-time use**. It can't be reused because it has no name
+
+### A new data type
+- Want to introduce more general compound data types
+    - Indexed sequences of elements, which could themselves be compound structures
+    - Tuples-immutable不可变
+    - Lists-mutable可变
+
+### Tuples
+- Indexable ordered sequence of objects
+    - Objects can be any type -int, string, tuple, tuple of tuples, ...
+- Cannot change element values,immutable
+
+code:
+
+    te =() # Empty tuple
+    ts =(2，) #Extra comma means tuple with one element
+
+    t=(2，"mit"，3)
+    t[0]  #evaluates to 2
+    (2,"mit",3)+(5,6)  # evaluates to anew tuple(2,"mit",3,5,6)
+    t[1:2]   #slice tuple, evaluates to("mit",)
+    t[1:3]  #slice tuple, evaluates to("mit",3)
+    len(t)  #evaluates to 3
+    max((3,5,0))  #evaluates 5
+    t[1]= 4   #gives error, can't modify object
+- convebniently used to **swap** variable values
+#
+
+    x=1
+    y=2
+    (x,y)=(y,x)
+- used to **return more than one value** from a function
+
+### VARIABLE NUMBER Of ARGUMENTS
+- Python has some built-in functions that take variable number of arguments, e.g, min
+- Python allows a programmer to have same capability, using **\* notation**
+- numbers is bound to a **tuple of the supplied values**
+#
+    def mean(*args):
+        tot =0
+        for a in args:
+            tot += a
+        return tot/len(args)
+
+- Example:
+    - mean(1,2,3,4,5,6)
+
+### LISTS
+- Indexable ordered sequence of objects
+    - Usually homogeneous同构 (i.e., all integers, all strings, all lists)
+    - But can contain mixed types (not common)
+- Denoted by square brackets, []
+- Mutable, this means you can change values of specific
+elements of list
+
+
+## Lecture 10 Lists and mutability
+### Mutability
+- Lists are mutable
+- Assigning to an element at an index changes the value
+
+### Operation on lists - append
+- Add an element to end of list with `L.append(element)`
+- Mutates the list
+
+### Strings to lists
+- Convert string to list with `list(s)`
+    - Every character from s is an element in a list
+- Use `s.split()`, to **split a string on a character** paramete, splits on spaces if called without a parameter
+
+### Lists to strings
+- Convert a **list of strings back to string**
+- Use `''.join(L)` to turn **a list of strings into a bigger string**
+- Can give a character in quotes to add char between every element 
+
+### A FEW INTERESTING LIST OPERATIONS
+- `sort()`
+    - L=[4,2,7]
+    - L.sort()
+    - Mutates L
+- `reverse()`
+    - L=[4,2,7]
+    - L.reverse()
+    - Mutates L
+- `sorted()`
+    - L=[4,2,7]
+    - L_new=sorted(L)
+    - Returns a sorted version of L(no mutation!)
+
+### Combining lists
+- Concatenation, + operator, creates a new list, with copies
+- Mutate list with `L.extend(some_list)`(copy of some_list)
+
+### Empty out a list and checking that it's the same object
+- You can **mutate a list to remove all its elements**
+    - This **does not make a new empty list**
+- Use `L.clear()`
+- How to check that it's **the same object in memory**?
+    - use the `id()` function
+    
