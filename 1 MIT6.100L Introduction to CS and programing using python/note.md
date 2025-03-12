@@ -439,4 +439,85 @@ elements of list
 - Use `L.clear()`
 - How to check that it's **the same object in memory**?
     - use the `id()` function
+
+
+## Lecture 11 Aliasing and cloning
+### Making a copy of this list
+- Can **make a copy of a list object** by duplicating all elements (top-level) into a new list object
+- `Lcopy=L[:]`
+    - Equivalent to looping over L and appending each element to Lcopy
+    - This does not make a copy of elements that are lists (will see how to do this at the end of this lecture)
+
+### OPERATION ON LISTS: remove
+- Delete element at a **specific index** with `del(L[index])`
+- Remove element at **end of list** with `L.pop ( )`,returns the removed element (can also call with specific index:`L.pop(3)`)
+- Remove a **specific element** with `L.remove(element)`
+    - Looks for the element and removes it (mutating the list)
+    - lf element occurs multiple times, removes first occurrence
+    - lfelement not in list, gives an error
+
+### Aliasing
+- All nicknames point to the same city
+    - Add new attribute to one nickname
+- All the aliased refer to the old attribute and all the new ones
+- Assignment (= sign) on mutable object creates an **alias**, not a clone
+
+### When you pass a list as a paramenter to a function, you are making an alias
+- The **acture parameter** (from the function **call**) is an **alias** for the **formal parameter**(from the function **definition**)
+
+### CONTROL COPYING
+- Suppose we want to create a copy of a list, not just a sharedpointer
+- Shallow copying does this at the top level of the list
+    - Equivalent to syntax [:]
+    - Any mutable elements are NOT copied
+- Use this when your list contains immutable objects only
+- lf we want all structures to be new copies, we need a deep copy
+- Use deep copy when your list might have mutable elements to ensure every structure at every level is copied
+
+
+## Lecture 12 List comprehension, functions as objects, testing and debugging
+
+
+
+## Lecture 13 Expections and assertions
+
+
+## Lecture 14 Dictionaries
+
+
+## Lecture 15 Recursion
+
+
+## Lecture 16 Recursion on non-numerics
+
+
+## Lecture 17 Python classed
+
+
+## Lecture 18 More python class methods
+
+
+## Lecture 19 Inheritance
+
+
+## Lecture 20 Fitness tracker object-oriented programing example
+
+
+## Lecture 21 Timing programs and counting operations
+
+
+## Lecture 22 Big oh and theta
+
+
+## Lecture 23 Complexity classed examples
+
+
+## Lecture 24 Sorting algorithms
+
+
+## Lecture 25 Plotting
+
+
+## Lecture 26 List access, hashing, simulations and wrap-up
+
     
