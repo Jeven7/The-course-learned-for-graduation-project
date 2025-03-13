@@ -477,43 +477,702 @@ elements of list
 
 ## Lecture 12 List comprehension, functions as objects, testing and debugging
 
+### LIST COMPREHENSIONS
+- Applying a **function to every element of a sequence**, then
+creating a new list with these values is a common concept
+- Python provides a concise one-liner way to do this, called a **list
+comprehension**
+    - Creates a new list
+    - Applies a function to every element of another iterable
+    - Optional, only apply to elements that satisfy a test
+`expression for ele in iterable if test`
+
+### RULES for KEYWORD PARAMETERS
+- In the **function definition**:
+    - Default parameters must go at the end
+- These are **ok for calling a function**:
+    - `bisection_root_new(123)`
+    - `bisection_root_new(123, 0.001)`
+    - `bisection_root_new(123, epsilon=0.001)`
+    - `bisection_root_new(x=123, epsilon=0.1)`
+    - `bisection_root_new(epsilon=0.1, x=123)`
+- These are **not ok for calling a function**:
+    - `bisection_root_new(epsilon=0.001, 123) #error`
+    - `bisection_root_new(0.001, 123) #no error but wrong`
+
+### FUNCTIONS CAN RETURN FUNCTIONS
+    def make_prod(a):
+        def g(b):
+            return a*b
+        return g #This is not a function call
+    
+    val=make_prod(2)(3)
+    print(val)
+
+    doubler=make_prod(2)
+    val=doubler(3)
+    print(val)
+
+### WHY BOTHER RETURNING FUNCTIONS?
+- Code can be **rewritten** without returning function objects
+- Good software design
+    - Embracing ideas of **decomposition, abstraction**
+    - Another **tool** to structure code
+- Interrupting execution
+    - Example of **control flow**
+    - A way to achieve **partial execution** and use result somewhere else before finishing the full evaluation
+
+### CLASSES OF TESTS
+- Unit testing单元测试
+    - Validate each piece of program
+    - **Testing each function** separately
+- Regression testing回归测试
+    - Add test for bugs as you find them
+    - **Catch reintroduced** errors that were previously fixed
+- Integration testing集成测试
+    - Does **overall program** work?
+    - Tend to rush to do this
+
+### TESTING APPROACHES
+- **Intuition** about natural boundaries to the problem
+-  If no natural partitions, might do **random testing**
+    - Probability that code is correct increases with more tests
+    - Better options below
+- **Black box testing**
+    - Explore paths through specification
+- **Glass box testing**
+    - Explore paths through code
+
+### BLACK BOX TESTING
+- Designed without looking at the code
+- Can be done by someone other than the implementer to avoid some implementer biases
+- Testing can be reused if implementation changes
+- Paths through specification
+    - Build test cases in different natural space partitions
+    - Also consider boundary conditions (empty lists, singleton list, large numbers, small numbers)
+
+### GLASS BOX TESTING
+- Use code directly to guide design of test cases
+- Called path-complete if every potential path through code is tested at least once
+-  What are some drawbacks of this type of testing?
+    - Can go through loops arbitrarily many times
+    - Missing paths
+
+### DEBUGGING
+- Tools
+    - Built in to IDLE and Anaconda
+    - Python Tutor
+    - print statement
+    - Use your brain, be systematic in your hunt
+
+### ERROR MESSAGES – EASY
+- Trying to access beyond the limits of a list
+`test = [1,2,3] then test[4] #IndexError`
+- Trying to convert an inappropriate type
+`int(test)  #TypeError`
+- Referencing a non-existent variable
+`a #NameError`
+- Mixing data types without appropriate coercion
+`'3'/4 #TypeError`
+- Forgetting to close parenthesis, quotation, etc.
+`a = len([1,2,3]`
+`print(a)   #SyntaxError`
 
 
 ## Lecture 13 Expections and assertions
+### HANDLING EXCEPTIONS
+- Typically, exception causes an error to occur and execution to stop
+- Python code can provide handlers for exceptions
+####
+    try:
+        # do some potentially
+        # problematic code
+    except:
+        # do something to
+        # handle the problem
+- If expressions in try block all succeed
+    - Evaluation continues with code after except block
+- Exceptions raised by any statement in body of try are handled by the except statement
+    - Execution continues with the body of the except statement
+    - Then other expressions after that block of code
 
+### OTHER BLOCKS ASSOCIATED WITH A TRY BLOCK
+- `else:`
+    - Body of this is executed when execution of associated try body **completes with no exceptions**
+- `finally"`
+    - Body of this is always executed after try, else and except clauses, even if they raised another error or executed a break, continue or return
+    - Useful for clean-up code that should be run no matter what else happened (e.g. close a file)
+
+### WHAT TO DO WITH EXCEPTIONS?
+- Fail silently:
+    - Substitute default values or just continue
+    - Bad idea! user gets no warning
+- Return an “error” value
+    - Complicates code having to check for a special value
+- Stop execution, signal error condition
+    `raise ValueError ("something is wrong")`
+
+### ASSERTIONS: DEFENSIVE PROGRAMMING TOOL
+- Want to be sure that assumptions on state of computation are as
+expected
+- Use an assert statement to raise an AssertionError exception if assumptions not met
+`assert <statement that should be true>, "message is not true"`
+- An example of good defensive programming
+    - Assertions don’t allow a programmer to control response to unexpected
+    conditions
+    - Ensure that execution halts whenever an expected condition is not met
+    - Typically used to check inputs to functions, but can be used anywhere
+    - Can be used to check outputs of a function to avoid propagating bad
+    values
+    - Can make it easier to locate a source of a bug
+
+### ASSERTIONS vs. EXCEPTIONS
+- Goal is to **spot bugs as soon as introduced** and make clear where they happened
+- Exceptions provide a way of handling unexpected input
+    - Use when you don’t need to halt program execution
+    - Raise exceptions if users supplies bad data input
+- Use **assertions**:
+    - Enforce conditions on a “contract” between a coder and a user
+    - As a **supplement** to testing
+    - Check **types** of arguments or values
+    - Check that **invariants** on data structures are met
+    - Check **constraints** on return values
+    - Check for **violations** of constraints on procedure (e.g. no duplicates in a list)
 
 ## Lecture 14 Dictionaries
+### A PYTHON DICTIONARY
+- Store **pairs of data** as an **entry**
+    - key (any immutable object)
+        - str, int, float, bool, tuple, etc
+    - value (any data object)
+        - Any above plus lists and other dicts!
+`my_dict={} #empty dictionary`
+
+### DICTIONARY LOOKUP
+- Similar to indexing into a list
+- Looks up the key
+- Returns the value associated with the key
+    -  If key isn’t found, get an error
+- There is no simple expression to get a key back given some value
+####
+    grades = {'Ana':'B', 'Matt':'A', 'John':'B', 'Katy':'A'}
+    grades['John']  #evaluates to 'B'
+    grades['Grace']  #gives a KeyError
+
+### DICTIONARY OPERATIONS
+` grades = {'Ana':'B', 'Matt':'A', 'John':'B', 'Katy':'A'}`
+- Add an entry
+`grades['Grace'] = 'A'`
+- Change entry
+`grades['Grace'] = 'C'`
+- Delete entry
+`del(grades['Ana'])`
+- Test if key in dictionary
+####
+    'John' in grades #returns True
+    'Daniel' in grades #returns False
+    'B' in grades #returns False
+- Can iterate over dictionaries but assume there is no guaranteed order
+- Get an **iterable that acts like a tuple of all keys**
+`grades.keys() #returns dict_keys(['Ana', 'Matt', 'John', 'Katy'])`
+`list(grades.keys()) #returns ['Ana', 'Matt', 'John', 'Katy']`
+- Get an iterable that acts like **a tuple of all dict values**
+`grades.values()  #returns dict_values(['B', 'A', 'B', 'A'])`
+`list(grades.values()) #returns ['B', 'A', 'B', 'A']`
+- Get an **iterable that acts like a tuple of all items**
+`grades.items()   #returns dict_items([('Ana', 'B'), ('Matt', 'A'), ('John', 'B'), ('Katy', 'A')])`
+`list(grades.items())   #returns [('Ana', 'B'), ('Matt', 'A'), ('John', 'B'), ('Katy', 'A')]`
+- Typical use is to **iterate over key,value tuple**
+#### 
+    for k,v in grades.items():
+        print(f"key {k} has value {v}")
+
+### DICTIONARY KEYS & VALUES
+- Dictionaries are mutable objects (aliasing/cloning rules apply)
+    - Use = sign to make an alias
+    - Use `d.copy()` to make a copy
+- Assume there is no order to keys or values!
+- Dict values
+    - Any type (immutable and mutable)
+        - Dictionary values can be lists, even other dictionaries!
+    - Can be duplicates
+- Keys
+    - Must be unique
+    - Immutable type (int, float, string, tuple,bool)
+        - Actually need an object that is hashable, but think of as immutable as all immutable types are hashable
+    - Be careful using `float` type as a key
 
 
 ## Lecture 15 Recursion
+### RECURSIVE and BASE STEPS
+-  **Recursive step**
+    - Decide how to reduce problem to a **simpler/smaller version** of same problem, plus simple operations
+-  **Base case**
+    - Keep reducing problem until reach a simple case that can be **solved directly**
+
+### WHAT IS RECURSION?
+- Algorithmically: a way to design solutions to problems by divide-and-conquer or decrease-and-conquer
+    - Reduce a problem to simpler versions of the same problem or to problem that can be solved directly
+- Semantically: a programming technique where a function calls itself
+    - In programming, goal is to NOT have infinite recursion
+    - Must have 1 or more base cases that are easy to solve directly
+    - Must solve the same problem on some other input with the goal of simplifying the larger input problem, ending at base case
+
+### In recursion, each function call is completely separate.
+- Separate scope/environments. Separate variable names. Fully I-N-D-E-P-E-N-D-E-N-T
+
 
 
 ## Lecture 16 Recursion on non-numerics
+### Each case (base cases, recursive step) must return the same type of object
+- Remember that function returns build upon each other!
+- If the base case returns a bool and the recursive step returns an int, this gives a type mismatch error at runtime.
+
+### INTUITION for WHEN to use RECURSION
+- We did not know ahead of time how many times we needed to loop! (aka how many levels of if/else we needed)
+- While loops kept iterating as long as some condition held true.
+
+### PROBLEMS that are NATURALLY RECURSIVE
+- A file system
+- Order of operations in a calculator
+- Scooby Doo gang searching a haunted castle
+- Bureaucracy
+
+### MAJOR RECURSION TAKEAWAYS
+- Most problems are solved more intuitively with iteration
+    - We show recursion on these to:
+        - Show you a different way of thinking about the same problem (algorithm)
+        - Show you how to write a recursive function (programming)
+- Some problems have nicer solutions with recursion
+    - If you recognize solving the same problem repeatedly, use recursion
+- Tips
+    - Every case in your recursive function must return the same type of thing
+    - Your function doesn’t have to be efficient on the first pass
+        - It’s ok to have more than 1 base case
+        - It’s ok to break down the problem into many if/elifs
+        - As long as you are making progress towards a base case recursively
 
 
 ## Lecture 17 Python classed
+### Objects
+- Each is an object, and every object has:
+    - An internal data representation (primitive or composite)
+    - A set of procedures for interaction with the object
+-  An object is an instance of a type
+
+### OBJECT ORIENTED PROGRAMMING (OOP)
+- **EVERYTHING IN PYTHON IS AN OBJECT** (and has a type)
+- Can create new objects of some type
+- Can manipulate objects
+- Can destroy objects
+    - Explicitly using `del` or just “forget” about them
+    - ython system will reclaim destroyed or inaccessible objects – called “garbage collection”
+
+### WHAT ARE OBJECTS?
+- Objects are a data abstraction that captures…
+- (1) An internal representation
+    - Through data attributes
+- (2) An interface for interacting with object
+    - Through methods
+    (aka procedures/functions)
+    - Defines behaviors but
+    hides implementation
+
+### ADVANTAGES OF OOP
+- **Bundle data into packages** together with procedures that work on them through well-defined interfaces
+- Divide-and-conquer development
+    - Implement and test behavior of each class separately
+    - Increased modularity reduces complexity
+- Classes make it easy to reuse code
+- Many Python modules define new classes
+- Each class has a separate environment (no collision on function names)
+- Inheritance allows subclasses to redefine or extend a selected subset of a superclass’ behavior
+
+### CREATING AND USING YOUR OWN TYPES WITH CLASSES
+- Make a distinction between **creating a class** and **using an instance** of the class
+- Creating the class involves
+    - Defining the class name
+    - Defining class attributes
+    - for example, someone wrote code to implement a list class
+- Using the class involves
+    - Creating new instances of the class
+    - Doing operations on the instances
+    - for example, `L=[1,2]` and `len(L)`
+
+### A PARALLEL with FUNCTIONS
+- **Defining a class** is like defining a function
+    - With functions, we tell Python this procedure exists
+    - With classes, we tell Python about **a blueprint for this new data type**
+        - Its data attributes
+        - Its procedural attributes
+- **Creating instances of objects** is like calling the function
+    - With functions we make calls with different actual parameters
+    - With classes, we create new object tinstances in memory of this type
+
+### DEFINE YOUR OWN TYPES
+- Use the `class` keyword to define a new type
+####
+    class Coordinate(object):
+        #define attribute here
+
+### WHAT ARE ATTRIBUTES?
+- Data and procedures that **“belong”** to the class
+- **Data attributes**
+    - Think of data as other objects/variables that make up the class
+    - for example, a coordinate is made up of two numbers
+- **Methods** (procedural attributes)
+    - Think of methods as functions that only work with this class
+    - How to interact with the object
+    - for example you can define a distance between two coordinate objects but there is no meaning to a distance between two list objects
+
+### DEFINING HOW TO CREATE AN INSTANCE OF A CLASS
+- First have to define how to create an instance of class
+- Use a special method called `__init__` to initialize some data attributes or perform initialization operations
+####
+    class coordinate(object):
+        def __init__(self,xval,yval):
+            self.x=xval
+            sele.y=yval
+
+- `self` allows you to create **variables that belong to this object**
+- Without `self`, you are just creating regular variables!
+
+### When defining a class, we don’t have an actual tangible object here.
+- It’s only a definition
+
+### DEFINE A METHOD FOR THE Coordinate CLASS
+####
+    def distance(self,other):
+        x_diff_sq = (self.x-other.x)**2
+        y_diff_sq = (self.y-other.y)**2
+        return (x_diff_sq + y_diff_sq)**0.5
+
+### THE POWER OF OOP
+- **Bundle together objects** that share
+    - Common attributes and
+    - Procedures that operate on those attributes
+- Use **abstraction** to make a distinction between how to implement an object vs how to use the object
+- Build **layers** of object abstractions that inherit behaviors from other classes of objects
+- Create our **own classes of objects** on top of Python’s basic classes
 
 
 ## Lecture 18 More python class methods
+### SPECIAL OPERATORS IMPLEMENTED WITH DUNDER METHODS
+- +, -, ==, <, >, len(), print, and many others are shorthand notations
+- Behind the scenes, these get replaced by a method!
+- Can override these to work with your class
+- Define them with double underscores before/after
+`__add__(self, other) # self + other`
+`__sub__(self, other) # self - other`
+`__mul__(self, other) # self * other`
+
+### PRINT REPRESENTATION OF AN OBJECT
+    >>> c = Coordinate(3,4)
+    >>> print(c)
+    <__main__.Coordinate object at 0x7fa918510488>
+- Uninformative print representation by default
+-  Define a `__str__` method for a class
+- Python calls the `__str__` method when used with print on your class object
+
+### WRAPPING YOUR HEAD AROUND TYPES AND CLASSES
+- Use `isinstance()` to check if an object is a Coordinate
+####
+    >>> print(isinstance(c, Coordinate))
+    True
 
 
 ## Lecture 19 Inheritance
+### Access data attributes (stuff defined by `self.xxx`) through methods – it’sbetter style
+
+### HIERARCHIES
+- **Parent class** (superclass)
+- **Child class** (subclass)
+    - Inherits all data and behaviors of parent class
+    - Add more info
+    - Add more behavior
+    - Override behavior
+
+### INHERITANCE: PARENT CLASS
+    class Animal(object):
+        def __init__(self, age):
+            self.age = age
+            self.name = None
+        def get_age(self):
+            return self.age
+        def get_name(self):
+            return self.name
+        def set_age(self, newage):
+            self.age = newage
+        def set_name(self, newname=""):
+            self.name = newname
+        def __str__(self):
+            return "animal:"+str(self.name)+":"+str(self.age)
+
+### INHERITANCE: SUBCLASS
+    class Cat(Animal):
+        def speak(self):
+            print("meow")
+        def __str__(self):
+            return "cat:"+str(self.name)+":"+str(self.age)
+- Add new functionality with `speak()`
+    - Instance of type Cat can be called with new methods
+    - Instance of type Animal throws error if called with Cat’s new method
+- `__init__` is not missing, uses the Animal version
+
+### WHICH METHOD TO USE?
+- Subclass can have **methods with same name** as superclass
+- For an instance of a class, look for a method name in current **class definition**
+- If not found, look for method name **up the hierarchy** (in parent, then grandparent, and so on)
+- Use first method up the hierarchy that you found with that method name
+
+### A subclass can use a parent’s attributes, override a parent’s attributes, or define new attributes.
+- Attributes are either data or methods.
+
+### Class variables are shared between all instances.
+- If one instance changes it,it’s changed for every instance.
 
 
 ## Lecture 20 Fitness tracker object-oriented programing example
 
 
-## Lecture 21 Timing programs and counting operations
 
+
+## Lecture 21 Timing programs and counting operations
+### EFFICIENCY IS IMPORTANT
+- Separate time and space efficiency of a program
+- Tradeoff between them: can use up a bit more memory
+to store values for quicker lookup later
+- Challenges in understanding efficiency
+    - A program can be implemented in many different ways
+    - You can solve a problem using only a handful of different algorithms
+- Want to separate choice of implementation from choice of more abstract algorithm
+
+### ASIDE on MODULES
+- A module is a set of python definitions in a file
+- You first need to “import” the module into your environment
+####
+    import time
+    import random
+    import dateutil
+    import math
+- Call functions from inside the module using the module’s name and dot notation
+`math.sin(math.pi/2)`
+
+### TIMING A PROGRAM
+- Use time module
+`import time`
+- Recall that importing means to bring in that class into your own file
+#### 
+    def c_to_f(c):
+        return c*9.0/5 + 32
+    
+    tstart = time.time()  #start clock
+    c_to_f(37)  # call function
+    dt = time.time() - tstart #stop clock
+    print(dt, "s,")
+
+### TIMING PROGRAMS IS INCONSISTENT
+- GOAL: to evaluate different algorithms
+- Running time **should vary between algorithms**
+
+### COUNTING OPERATIONS
+- Assume these steps take constant time:
+    - Mathematical operations
+    - Comparisons
+    - Assignments
+    - Accessing objects in memory
+- Count number of
+operations executed as
+function of size of input
 
 ## Lecture 22 Big oh and theta
+### Timing 
+- Timing is a critical tool to assess the performance of programs
+    - At the end of the day, it is irreplaceable for real-world assessment
+- But we will see a complementary tool (**asymptotic complexity**) that has other advantages
+    - A priori evaluation (before writing or running code)
+    - **Assesses algorithm** independent of machine and implementation (what is intrinsic efficiency of algorithm?)
+    - Provides direct insight into the design of efficient algorithms
+
+### PROBLEMS WITH TIMING AND COUNTING
+- **Timing** the exact running time of the program
+    - Depends on **machine**
+    - Depends on **implementation**
+    - **Small inputs** don’t show growth
+- **Counting** the exact number of steps
+    - Gets us a **formula**!
+    - **Machine independent**, which is good
+    - Depends on **implementation**
+    - **Multiplicative/additive constants** are irrelevant for large inputs
+- Want to:
+    - evaluate **algorithm**
+    - evaluate **scalability**
+    - evaluate **in terms of input size**
+
+### ASYMPTOTIC GROWTH
+- Goal: describe how time grows as size of input grows
+    - Formula relating input to number of operations
+- Given an expression for the number of operations needed to
+compute an algorithm, want to know **asymptotic behavior as size of problem gets large**
+    - Want to put a **bound** on growth
+    - Do not need to be precise: **“order of” not “exact”** growth
+- Will focus on term that grows most rapidly
+    - Ignore additive and multiplicative constants, since want to know how rapidly time required increases as we increase size of input
+- This is called order of growth
+    - Use mathematical notions of “big O” and “big Θ” (Big Oh and Big Theta)
+
+### BIG O Definition
+- Big OH is a way to upper bound the growth of any function
+- 𝑓(𝑥) = 𝑂(𝒈(𝒙)) means there exist constants 𝒄𝟎, 𝒙𝟎 for which 𝒄𝟎𝒈(𝒙) ≥ 𝒇(𝒙) for all 𝑥 > 𝒙𝟎
+
+### BIG Θ Definition
+- A big Θ bound is a lower and upper bound on the growth of some function
+
+### Θ vs O
+-  In practice, Θ bounds are preferred, because they are “tight"
+
+### COMBINING COMPLEXITY CLASSES LOOPS IN SERIES
+- Analyze statements inside functions to get order of growth
+- Apply some rules, focus on dominant term
+- Law of Addition for Θ():
+    - Used with sequential statements
+    - Θ(𝑓(𝑛)) + Θ(𝑔(𝑛)) = Θ(𝑓(𝑛) + 𝑔(𝑛))
+- For example: Θ(𝑛) + Θ(𝑛 ∗ 𝑛) = Θ(𝑛 + 𝑛^2) = Θ(𝑛^2) because of dominant 𝑛^2 term
+- Law of Multiplication for Θ():
+    - Used with nested statements/loops
+    - Θ(𝑓(𝑛)) ∗ Θ(𝑔(𝑛)) = Θ(𝑓(𝑛) ∗ 𝑔(𝑛))
 
 
 ## Lecture 23 Complexity classed examples
+### CONSTANT COMPLEXITY
+- Complexity **independent of inputs**
+- Very few interesting algorithms in this class, but can often have pieces that fit this class
+- **Can have loops or recursive calls**, but number of iterations or calls independent of size of input
+- Some built-in operations to a language are constant
+    - Python indexing into a list `L[i]`
+    - Python list append `L.append()`
+    - Python dictionary lookup `d[key]`
+### LINEAR COMPLEXITY
+- Simple iterative loop algorithms
+    - Loops must be a function of input
+- Linear search a list to see if an element is present
+- Recursive functions with one recursive call and constant **overhead** for call
+- Some built-in operations are linear
+    - `e in L`
+    - Subset of list: e.g.` L[:len(L)//2]`
+    - `L1 == L2`
+    - `del(L[5])`
+
+### POLYNOMIAL COMPLEXITY (OFTEN QUADRATIC)
+- Most common polynomial algorithms are quadratic, i.e., complexity grows with square of size of input
+- Commonly occurs when we have nested loops or recursive function calls
+
+### EXPONENTIAL COMPLEXITY
+- Recursive functions where have more than one recursive call for each size of problem
+    - Fibonacci
+- Many important problems are inherently exponential
+
+### LOGARITHMIC COMPLEXITY
+- Complexity grows as log of size of one of its inputs
+- Example algorithm: binary search of a list
+
+### SEARCHING ALGORITHMS
+- Linear search
+    - Brute force search
+    - List does not have to be sorted
+- Bisection search
+    - List **MUST be sorted** to give correct answer
+
+### AMORTIZED COST-- n is len(L)
+- Sort a list once then do many searches
+- AMORTIZE cost of the sort over many searches
+- SORT + K * Θ(log n) < K * Θ(n) implies that for large K, SORT time becomes irrelevant
 
 
 ## Lecture 24 Sorting algorithms
+### BOGO/RANDOM/MONKEY SORT
+- aka bogosort, stupidsort, slowsort, randomsort, shotgunsort
+- To sort a deck of cards
+    - throw them in the air
+    - pick them up
+    - are they sorted?
+    - repeat if not sorted
+- Best case: **Θ(n) where n is len(L)** to check if sorted
+- Worst case: Θ(?) it is **unbounded** if really unlucky
 
+### BUBBLE SORT
+- **Compare consecutive pairs** of elements
+- **Swap elements** in pair such that smaller is first
+- When reach end of list, **start over** again
+- Stop when **no more swaps** have been made
+#### 
+    def bubble_sort(L):
+        did_swap = True
+        while did_swap:
+            did_swap = False
+            for j in range(1, len(L)):
+                if L[j-1] > L[j]:
+                    did_swap = True
+                    L[j],L[j-1] = L[j-1],L[j]
+- Θ(n2) where n is len(L) to do len(L)-1 comparisons and len(L)-1 passes
+
+### SELECTION SORT
+- First step
+    - Extract **minimum element**
+    - **Swap it** with element at **index 0**
+- Second step
+    - In remaining sublist, extract **minimum element**
+    - **Swap it** with the element at **index 1**
+- Keep the left portion of the list sorted
+    - At ith step, **first i elements in list are sorted**
+    - All other elements are bigger than first i elements
+#### 
+    def selection_sort(L):
+        for i in range(len(L)):
+            for j in range(i, len(L)):
+                if L[j] < L[i]:
+- Complexity of selection sort is 𝚯(n^2) where n is len(L)             
+
+### MERGE SORT归并排序
+- Use a **divide-and-conquer** approach:
+    - If list is of length 0 or 1, already sorted
+    - If list has more than one element, split into two lists, and sort each
+    - Merge sorted sublists
+        - Look at first element of each, move smaller to end of the result
+        - When one list empty, just copy rest of other list
+- **Split list in half** until have sublists of only 1 element
+- Merge such that **sublists will be sorted after merge**
+#### 
+    def merge(left, right):
+        result = []
+        i,j = 0, 0
+        while i < len(left) and j < len(right):
+            if left[i] < right[j]:
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        while (i < len(left)):
+            result.append(left[i])
+            i += 1
+        while (j < len(right)):
+            result.append(right[j])
+            j += 1
+        return result
+    
+    def merge_sort(L):
+        if len(L) < 2:
+            return L[:]
+        else:
+            middle = len(L)//2
+            left = merge_sort(L[:middle])
+            right = merge_sort(L[middle:])
+            return merge(left, right)
+- Each recursion level does Θ(n) work and there are Θ(log n) levels, where n is len(L)
+-  Overall complexity is **𝚯(n log n)** where n is len(L)
+
+### 𝚯(n log n) is the fastest a sort can be
 
 ## Lecture 25 Plotting
 
