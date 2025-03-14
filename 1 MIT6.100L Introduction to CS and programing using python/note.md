@@ -1175,8 +1175,141 @@ compute an algorithm, want to know **asymptotic behavior as size of problem gets
 ### 𝚯(n log n) is the fastest a sort can be
 
 ## Lecture 25 Plotting
+### MATPLOTLIB
+- Can import library into computing environmen
+`import matplotlib.pyplot as plt`
+    - Allows code to reference library procedures as `plt.<processName>`
+- Provides access to existing set of graphing/plotting procedures
+
+### PLOTTING THE DATA
+- To generate a plot:
+`plt.plot(<x values>, <y values>)`
+- Arguments are lists (or sequences) of numbers
+    - Lists must be of the same length
+    - Generates a sequence of <x, y> values on a Cartesian grid
+    - Plotted in order, then connected with lines
+
+### ORDER OF POINTS MATTERS
+- Python plots using the order of the points and connecting consecutive points
+
+### SCATTER PLOT DOES NOT CONNECT DATA POINTS
+`plt.scattert(<x values>, <y values>)`
+
+### PRODUCING MULTIPLE PLOTS
+- Let’s graph each one in separate frame/window
+- Call
+`plt.figure(<arg)`
+    - Creates a new display with that name if one does not already exist
+    - If a display with that name exists, reopens it for additional processing
+
+### Graph mean
+    plt.title('graph title')
+    plt.xlabel('label of x')
+    plt.ylabel('label of y')
+
+    plt.xlim(1,12) #This sets limits on display for x axis
+
+    plt.xticks((1,2,3,4,5,6,7,8,9,10,11,12)) #This specifies which x values to mark
+
+    plt.xticks((1,2,3),('Jan',\
+    'Feb','Mar'))  #(1,2,3) is the locations of tick marks, ('Jan','Feb','Mar') is labels for tick marks, the \ tell python to continue the next line as part of same line
+
+### Adding grid lines
+- Can toggle grid lines on/off with `plt.grid()`
+
+### Add legend
+    plt.plot(months,boston,label='Boston')
+    plt.legend(loc='best') #Choice for where to place legend
+    #Other options:upper left,upper right, lower left, lower right, upper center, lower center,center right, center left,center
+
+### CONTROLLING PARAMETERS
+- Suppose we want to control details of the displays
+- Examples: 
+    - Changing color or style of data sets
+    - Changing width of lines or displays
+    - Using subplots
+- Can provide a “format” argument to plot
+    - “marker”, “line”, “color”
+    - Can skip any of these choices, plot takes default
+    - Order doesn’t matter, as no confusion between symbols
+`plt.plot(months,boston,'b-',label='Boston')`
+- Using keywords
+`plt.plot(months,boston,label='Boston', color='b', linestyle='-')`
+
+### LINE, COLOR, MARKER OPTIONS
+![option1](plot%20option1.jpg)
+
+### MANY OTHER OPTIONS
+- Using the linewidth keyword (in pixels)
+`plt.plot(months,boston,label='Boston', color='b', linestyle='-', linewidth=2)`
+- plots within plots
+####
+    plt.subplot(2,1,1)  #Plot with 2 rows, 1 column,this is first
+    plt.subplot(2,1,2)  #Plot with 2 rows, 1 column,this is second
+- Fix y axis
+`plt.ylim(0,100)`
+
+### CHANGING THE SCALING
+`plt.semilogy()  #Use log scale on y axis`
+- Log scale means each increment along axis corresponds to exponential increase in size; while in normal scale each increment corresponds to linear increase in size
+
+### Histograms
+`plt.hist(firstDigits,bins=9)`
 
 
 ## Lecture 26 List access, hashing, simulations and wrap-up
+### COMPLEXITY OF SOME PYTHON OPERATIONS
+![complexity of some python operations](complexity%20of%20list%20operation.jpg)
 
-    
+### CONSTANT TIME LIST ACCESS
+- If list is all ints, list of length L
+    - Set aside 4*len(L) bytes
+    - Store values directly
+    - Consecutive set of memory locations
+- List name points to first memory location
+- To access ith element
+    - Add 32*i to first location, since entries are 4*8=32 bits long
+    - Access that location in memory
+    - Constant time complexity
+- If list is heterogeneous
+    - Can’t store values directly (don’t all fit in 32 bits)
+    - Use indirection to reference other objects
+    - Store pointers to values (not value itself)
+    - Still use consecutive set of memory locations
+    - Still set aside 4*len(L) bytes
+    - Still add 32*i to first location and +1 to access that location in memory
+    - Still constant time complexity
+
+### Dictionary operation complexity
+![dictionary](complexity%20of%20dictionary%20operation.jpg)
+
+### HASH TABLE
+- To avoid many keys hashing to the same value, have each key hash to a separate value
+- If hashing strings:
+    - Represent each character with binary code
+    - Concatenate bits together, and convert to an integer
+
+### PROPERTIES OF A GOOD HASH FUNCTION
+- Maps domain of interest to integers between 0 and size of hash table
+- The hash value is fully determined by value being hashed (nothing random)
+- The hash function uses the entire input to be hashed
+    - Fewer collisions
+- Distribution of values is uniform, i.e., equally likely to land on any entry in hash table
+- Side Reminder: keys in a dictionary must be hashable
+    - aka immutable
+    - They always hash to the same value
+
+### TOPIC USEFUL FOR MANY DOMAINS
+- Computationally describe the world using randomness
+- One very important topic relevant to many fields of study
+    - Risk modeling and analysis
+    - Reduce complex models
+- Idea:
+    - Observe an event and want to calculate something about it
+    - Using computation, design an experiment of that event
+    - Repeat the experiment K many times (make a simulation)
+    - Keep track of the outcome of your event
+    - After K repetitions, report the value of interest
+
+
+
