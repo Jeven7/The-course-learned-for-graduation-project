@@ -7,7 +7,7 @@
 
 ## 2 吴恩达 Machine learning
 - lecture website: https://www.coursera.org/learn/machine-learning
-- b站： https://www.bilibili.com/video/BV1Bq421A74G/?share_source=copy_web&vd_source=343bef2897116ac8457328069e8fc81a
+- b站： https://www.bilibili.com/video/BV1owrpYKEtP/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click
 
 ## 3 吴恩达 Deep learning
 - lecture website:https://www.coursera.org/specializations/deep-learning
